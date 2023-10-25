@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-service
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: {{ .Values.webapp.containerPort }}  # Adjust targetPort to match your application
+  selector:
+    app: webapp  # Label selector to match your pods
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: webapp
+spec:
+  replicas: {{ .Values.webapp.replicaCount }}
+  strategy:
+    type: {{ .Values.webapp.strategy.type }}
+    rollingUpdate:
+      maxSurge: {{ .Values.webapp.strategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.webapp.strategy.rollingUpdate.maxUnavailable }}
+  minReadySeconds: {{ .Values.webapp.minReadySeconds }}
+  progressDeadlineSeconds: {{ .Values.webapp.progressDeadlineSeconds }}
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: {{ .Values.webapp.image.repository }}:{{ .Values.webapp.image.tag }}
+        ports:
+        - containerPort: {{ .Values.webapp.containerPort }}
+        # startupProbe:
+        #     httpGet:
+        #       path: {{ .Values.webapp.livenessProbePath }}  
+        #       port: {{ .Values.webapp.containerPort }}
+        #     periodSeconds: 5
+        #     failureThreshold: 30
+        readinessProbe:
+            httpGet:
+              path: {{ .Values.webapp.readinessProbePath }} 
+              port: {{ .Values.webapp.containerPort }}
+            periodSeconds: 10
+            initialDelay: 10
+            failureThreshold: 10
+        livenessProbe:
+            httpGet:
+              path: {{ .Values.webapp.livenessProbePath }}  
+              port: {{ .Values.webapp.containerPort }}
+            periodSeconds: 15
+        envFrom:
+            - configMapRef:
+                name: {{ .Values.configMap.name }}
+      imagePullSecrets:
+      - name: {{ .Values.secrets.imagePullSecrets }}
