@@ -6,7 +6,7 @@ postgresql:
   postgresPassword: postgres
   postgresDatabase: app
   postgresPort: 5432
-  postgresStorageSize: 10Gi
+  postgresStorageSize: 3Gi
   image:
     repository: postgres  
     tag: 13  
@@ -26,17 +26,17 @@ webapp:
       maxUnavailable: 1
   minReadySeconds: 45
   progressDeadlineSeconds: 90
-  readinessProbePath: v1/actuator/health/readiness 
+  readinessProbePath: v1/actuator/health/readiness
   livenessProbePath: v1/actuator/health/liveness
 
 
 
-configMap:
-  enabled: true
-  name: webapp-config
+# configMap:
+#   enabled: true
+#   name: {{ .Release.Name }}-webapp-config
 
 secrets:
-  imagePullSecrets: {{ .Release.Name | quote }}-pull-secret
+  imagePullSecrets: pg-pull-secret
   postgresPassword: postgres-secrets
   name: postgres-secrets
   data:
