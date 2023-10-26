@@ -1,0 +1,29 @@
+name: Helm template
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  helm-template:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Setup Helm
+      run: |
+        curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+        chmod 700 get_helm.sh
+        ./get_helm.sh
+
+    - name: Helm Lint
+      run: |
+        helm lint ./
+
+    - name: Helm Template
+      run: |
+        RELEASE_NAME=$(helm list --short | head -n 1)
+        helm template $RELEASE_NAME ./
