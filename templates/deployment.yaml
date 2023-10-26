@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-app-service
+  name: {{ .Release.Name }}-webapp-lb-service
 spec:
   type: LoadBalancer
   ports:
@@ -14,7 +14,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: webapp-deployment
+  name: {{ .Release.Name }}-webapp-deployment
   labels:
     app: webapp
 spec:
@@ -39,17 +39,11 @@ spec:
         image: {{ .Values.webapp.image.repository }}:{{ .Values.webapp.image.tag }}
         ports:
         - containerPort: {{ .Values.webapp.containerPort }}
-        # startupProbe:
-        #     httpGet:
-        #       path: {{ .Values.webapp.livenessProbePath }}  
-        #       port: {{ .Values.webapp.containerPort }}
-        #     periodSeconds: 5
-        #     failureThreshold: 30
         readinessProbe:
             httpGet:
-              path: {{ .Values.webapp.readinessProbePath }} 
+              path: {{ .Values.webapp.readinessProbePath }}
               port: {{ .Values.webapp.containerPort }}
-            periodSeconds: 10
+            periodSeconds: 20
             initialDelay: 10
             failureThreshold: 10
         livenessProbe:
@@ -59,6 +53,6 @@ spec:
             periodSeconds: 15
         envFrom:
             - configMapRef:
-                name: {{ .Values.configMap.name }}
+                name: {{ .Release.Name }}-webapp-config
       imagePullSecrets:
-      - name: {{ .Values.secrets.imagePullSecrets }}
+      - name: {{ .Release.Name }}-pull-secret
