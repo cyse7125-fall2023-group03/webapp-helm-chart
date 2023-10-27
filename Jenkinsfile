@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     def new_version = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
-                    sh "awk -v new_version="$new_version" '/version:/ {$2 = new_version} 1' Chart.yaml > tmp && mv tmp Chart.yaml"
+                    sh "sh 'awk -v new_version="' + new_version + '" \'/version:/ {$2 = new_version} 1\' Chart.yaml > tmp && mv tmp Chart.yaml'"
                 }
             }
         }
@@ -26,9 +26,9 @@ pipeline {
         stage('Package Chart') {
             steps {
                 script {
-                // Create a zip file with the chart
-                 def new_version = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
-                 sh 'cd .. && tar -czf /var/lib/jenkins/workspace/helm/my-chart-${new_version}.tgz /var/lib/jenkins/workspace/helm'
+                    // Create a zip file with the chart
+                     def new_version = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
+                     sh 'cd .. && tar -czf /var/lib/jenkins/workspace/helm/my-chart-${new_version}.tgz /var/lib/jenkins/workspace/helm'
                 }
             }
         }
