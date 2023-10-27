@@ -43,6 +43,9 @@ pipeline {
                     
                     def releaseInfo = sh(script: "curl -s -H 'Authorization: token ${githubToken}' https://api.github.com/repos/uday-kiran-k/cyse7125-fall2023-group03/webapp-helm-chart/releases/tags/${tagName}", returnStdout: true).trim()
                     def releaseId = new groovy.json.JsonSlurper().parseText(releaseInfo).id.toString()
+
+                    echo "Tag Name: ${tagName}" // Print the tag name
+                    echo "Release ID: ${releaseId}" // Print the release ID
                     // Upload the release asset
                     sh """
                         curl -H 'Authorization: token ${githubToken}' \
