@@ -30,7 +30,8 @@ pipeline {
                     // Create a zip file with the chart
                     def new_version = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
                     sh "rm -rf /var/lib/jenkins/workspace/*.tgz"
-                    sh "tar -czf \"/var/lib/jenkins/workspace/helm-chart-${new_version}.tgz\" /var/lib/jenkins/workspace/helm"
+                    sh "helm package --destination /var/lib/jenkins/workspace /var/lib/jenkins/workspace/helm"
+                    // sh "tar -czf \"/var/lib/jenkins/workspace/helm-chart-${new_version}.tgz\" /var/lib/jenkins/workspace/helm"
                 }
             }
         }
@@ -50,9 +51,9 @@ pipeline {
                     sh """
                         curl -H 'Authorization: token ${githubToken}' \
                         -H 'Accept: application/vnd.github.v3+json' \
-                        -X POST https://uploads.github.com/repos/uday-kiran-k/cyse7125-fall2023-group03/webapp-helm-chart/releases/tag/${tagName}/assets?name=helm-chart-${tagName}.tgz \
+                        -X POST https://uploads.github.com/repos/uday-kiran-k/cyse7125-fall2023-group03/webapp-helm-chart/releases/tag/${tagName}/assets?name=webapp-helmcharts-${tagName}.tgz \
                         --header 'Content-Type: application/gzip' \
-                        --upload-file /var/lib/jenkins/workspace/helm-chart-${tagName}.tgz
+                        --upload-file /var/lib/jenkins/workspace/webapp-helmcharts-${tagName}.tgz
                     """
                 }
             }
