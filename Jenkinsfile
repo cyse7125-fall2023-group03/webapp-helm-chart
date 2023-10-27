@@ -17,8 +17,8 @@ pipeline {
         stage('Update Chart Version') {
             steps {
                 script {
-                    def newVersion = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
-                    sh "sed -i 's/version:.*\$/version: \${newVersion}/' /var/lib/jenkins/workspace/helm/Chart.yaml"
+                    def new_version = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
+                    sh "awk -v new_version="$new_version" '/version:/ {$2 = new_version} 1' Chart.yaml > tmp && mv tmp Chart.yaml"
                 }
             }
         }
@@ -27,8 +27,8 @@ pipeline {
             steps {
                 script {
                 // Create a zip file with the chart
-                 def newVersion = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
-                 sh 'cd .. && tar -czf my-chart-${newVersion}.tgz webapp-helm-chart'
+                 def new_version = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
+                 sh 'cd .. && tar -czf /var/lib/jenkins/workspace/helm/my-chart-${new_version}.tgz /var/lib/jenkins/workspace/helm'
                 }
             }
         }
