@@ -33,7 +33,7 @@ pipeline {
         stage('Update Chart Version') {
             steps {
                 script {
-                    def branchName = "my-branch-name" // Replace with the desired branch name
+                    def branchName = "origin/main" // Replace with the desired branch name
                     def newVersion = sh(script: "BRANCH=${branchName} semantic-release get version", returnStdout: true).trim()
                     // Update Chart.yaml with the new version
                     sh "sed -i 's/version:.*\$/version: \${newVersion}/' /var/lib/jenkins/workspace/helm/Chart.yaml"
