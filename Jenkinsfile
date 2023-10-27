@@ -29,6 +29,7 @@ pipeline {
                 script {
                     // Create a zip file with the chart
                     def new_version = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
+                    sh "rm -rf /var/lib/jenkins/workspace/*.tgz"
                     sh "tar -czf \"/var/lib/jenkins/workspace/helm-chart-${new_version}.tgz\" /var/lib/jenkins/workspace/helm"
                 }
             }
