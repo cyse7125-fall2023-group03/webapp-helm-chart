@@ -24,7 +24,7 @@ pipeline {
                         // Install Semantic Release
                         sh "npm install semantic-release@${env.SEMANTIC_RELEASE_VERSION}"
                         // Run Semantic Release
-                        sh "DEBUG=semantic-release:* npx semantic-release -e ./release.config.js"
+                        sh "DEBUG=semantic-release:* npx semantic-release -e /var/lib/jenkins/workspace/helm/release.config.js"
                     }
                 }
             }
