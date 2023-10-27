@@ -18,7 +18,7 @@ pipeline {
             steps {
                 script {
                     def new_version = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
-                    sh "sh 'awk -v new_version="' + new_version + '" \'/version:/ {$2 = new_version} 1\' Chart.yaml > tmp && mv tmp Chart.yaml'"
+                    sh "awk -v new_version='${new_version}' '/version:/ {\$2 = new_version} 1' Chart.yaml > tmp && mv tmp Chart.yaml"
                 }
             }
         }
