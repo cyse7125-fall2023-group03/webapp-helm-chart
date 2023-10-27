@@ -13,29 +13,11 @@ pipeline {
                     url: 'https://github.com/cyse7125-fall2023-group03/webapp-helm-chart.git'
             }
         }
-        
-        
-        
-        stage('Install and Run Semantic Release') {
-        // agent {'node'}
-            steps {
-                withCredentials([string(credentialsId: 'helm-ghnew', variable: 'GITHUB_TOKEN')]) {
-                    script {
-                        // Install Semantic Release
-                        sh "npm install semantic-release@${env.SEMANTIC_RELEASE_VERSION}"
-                        // Run Semantic Release
-                        sh "DEBUG=semantic-release:* npx semantic-release -e /var/lib/jenkins/workspace/helm/.releaserc.json"
-                    }
-                }
-            }
-        }
 
         stage('Update Chart Version') {
             steps {
                 script {
-                    // def branchName = "main" // Replace with the desired branch name
-                    def newVersion = sh(script: "semantic-release get version", returnStdout: true).trim()
-                    // Update Chart.yaml with the new version
+                    def newVersion = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
                     sh "sed -i 's/version:.*\$/version: \${newVersion}/' /var/lib/jenkins/workspace/helm/Chart.yaml"
                 }
             }
@@ -44,7 +26,8 @@ pipeline {
         // stage('Package Chart') {
         //     steps {
         //         // Create a zip file with the chart
-        //         sh 'cd .. && tar -czf my-chart-${newVersion}.tgz webapp-helm-chart'
+                    def newVersion = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
+        //          sh 'cd .. && tar -czf my-chart-${newVersion}.tgz webapp-helm-chart'
         //     }
         // }
     }
