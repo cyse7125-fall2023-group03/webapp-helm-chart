@@ -34,26 +34,26 @@ pipeline {
             }
         }
         
-        stage('Create GitHub Release') {
+        stage('Upload Release Asset') {
             steps {
                 script {
-                    // Define GitHub release information
-                    // def githubToken = credentials('helm-gh') // Replace with your actual GitHub token ID
+                    def githubToken = credentials('helm-gh') // Replace with your actual GitHub token ID
                     def tagName = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
-
-                    // Create the GitHub release
+                    
+                    def releaseInfo = sh(script: "curl -s -H 'Authorization: token ${githubToken}' https://api.github.com/repos/uday-kiran-k/cyse7125-fall2023-group03/webapp-helm-chart/releases/tags/${tagName}", returnStdout: true).trim()
+                    def releaseId = new groovy.json.JsonSlurper().parseText(releaseInfo).id.toString()
+                    // Upload the release asset
                     sh """
-                        github-release upload \
-                            --user uday-kiran-k \
-                            --repo https://github.com/cyse7125-fall2023-group03/webapp-helm-chart.git \
-                            --tag ${tagName} \
-                            --name "helm-chart-${tagName}" \
-                            --file /var/lib/jenkins/workspace/helm-chart-${tagName}.tgz
-                            --token ${env.GITHUB_TOKEN}
-                    """.stripIndent()
+                        curl -H 'Authorization: token ${githubToken}' \
+                        -H 'Accept: application/vnd.github.v3+json' \
+                        -X POST https://uploads.github.com/repos/uday-kiran-k/cyse7125-fall2023-group03/webapp-helm-chart/releases/${releaseId}/assets?name=helm-chart-${tagName}.tgz \
+                        --header 'Content-Type: application/gzip' \
+                        --upload-file /var/lib/jenkins/workspace/helm-chart-${tagName}.tgz
+                    """
                 }
             }
         }
+
     }
 
     post {
