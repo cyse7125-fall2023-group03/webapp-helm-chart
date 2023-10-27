@@ -30,16 +30,15 @@ pipeline {
             }
         }
 
-        // stage('Update Chart Version') {
-        //     steps {
-        //         script {
-        //             def newVersion = sh(script: 'npx -q semantic-release-cli get version', returnStdout: true).trim()
-
-        //             // Update Chart.yaml with the new version
-        //             sh "sed -i 's/version:.*$/version: ${newVersion}/' path/to/your/chart/Chart.yaml"
-        //         }
-        //     }
-        // }
+        stage('Update Chart Version') {
+            steps {
+                script {
+                    def newVersion = sh(script: 'npx -q semantic-release get version', returnStdout: true).trim()
+                    // Update Chart.yaml with the new version
+                    sh "sed -i 's/version:.*\$/version: \${newVersion}/' ./Chart.yaml"
+                }
+            }
+        }
 
         // stage('Semantic Release') {
         //     steps {
