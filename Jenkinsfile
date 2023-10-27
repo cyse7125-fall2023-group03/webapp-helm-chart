@@ -41,17 +41,22 @@ pipeline {
                 script {
                     def githubToken = credentials('helm-gh') // Replace with your actual GitHub token ID
                     def tagName = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
-                    
+                    def releaseId
+                    // Get the release ID
                     def releaseInfo = sh(script: "curl -s -H 'Authorization: token ${githubToken}' https://api.github.com/repos/uday-kiran-k/cyse7125-fall2023-group03/webapp-helm-chart/releases/tags/${tagName}", returnStdout: true).trim()
-                    def releaseId = new groovy.json.JsonSlurper().parseText(releaseInfo).id.toString()
-
+                    releaseId = new groovy.json.JsonSlurper().parseText(releaseInfo)?.id?.toString()
                     echo "Tag Name: ${tagName}" // Print the tag name
+                    echo "Release Info: ${releaseInfo}" // Print the complete release information
                     echo "Release ID: ${releaseId}" // Print the release ID
+                    // def releaseInfo = sh(script: "curl -s -H 'Authorization: token ${githubToken}' https://api.github.com/repos/uday-kiran-k/cyse7125-fall2023-group03/webapp-helm-chart/releases/tags/${tagName}", returnStdout: true).trim()
+                    // def releaseId = new groovy.json.JsonSlurper().parseText(releaseInfo).id.toString()
+                    // echo "Tag Name: ${tagName}" // Print the tag name
+                    // echo "Release ID: ${releaseId}" // Print the release ID
                     // Upload the release asset
                     sh """
                         curl -H 'Authorization: token ${githubToken}' \
                         -H 'Accept: application/vnd.github.v3+json' \
-                        -X POST https://uploads.github.com/repos/uday-kiran-k/cyse7125-fall2023-group03/webapp-helm-chart/releases/tag/${tagName}/assets?name=webapp-helmcharts-${tagName}.tgz \
+                        -X POST https://uploads.github.com/repos/uday-kiran-k/cyse7125-fall2023-group03/webapp-helm-chart/releases/${releaseId}/assets?name=webapp-helmcharts-${tagName}.tgz \
                         --header 'Content-Type: application/gzip' \
                         --upload-file /var/lib/jenkins/workspace/webapp-helmcharts-${tagName}.tgz
                     """
