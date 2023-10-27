@@ -23,13 +23,13 @@ pipeline {
             }
         }
 
-        // stage('Package Chart') {
-        //     steps {
+        stage('Package Chart') {
+            steps {
         //         // Create a zip file with the chart
-                    def newVersion = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
-        //          sh 'cd .. && tar -czf my-chart-${newVersion}.tgz webapp-helm-chart'
-        //     }
-        // }
+                 def newVersion = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
+                 sh 'cd .. && tar -czf my-chart-${newVersion}.tgz webapp-helm-chart'
+            }
+        }
     }
 
     post {
