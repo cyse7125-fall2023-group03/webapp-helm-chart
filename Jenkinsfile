@@ -47,7 +47,7 @@ pipeline {
                     sh """
                         curl -H 'Authorization: token ${githubToken}' \
                         -H 'Accept: application/vnd.github.v3+json' \
-                        -X POST https://uploads.github.com/repos/uday-kiran-k/cyse7125-fall2023-group03/webapp-helm-chart/releases/${releaseId}/assets?name=helm-chart-${tagName}.tgz \
+                        -X POST https://uploads.github.com/repos/uday-kiran-k/cyse7125-fall2023-group03/webapp-helm-chart/releases/tag/${tagName}/assets?name=helm-chart-${tagName}.tgz \
                         --header 'Content-Type: application/gzip' \
                         --upload-file /var/lib/jenkins/workspace/helm-chart-${tagName}.tgz
                     """
