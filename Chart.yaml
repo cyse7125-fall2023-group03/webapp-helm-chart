@@ -12,5 +12,5 @@ maintainers:
   - name: Banish Mukkati Ganesh
     email: mukkatiganesh.b@northeastern.edu
 sources:
-  - github.com/cyse7125-fall2023-group03/webapp-helm-chart.git
+  - https://github.com/cyse7125-fall2023-group03/webapp-helm-chart
     
