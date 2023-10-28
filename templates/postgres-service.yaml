@@ -11,3 +11,4 @@ spec:
   clusterIP: None
   selector:
     app: postgres
+  type: ClusterIP
