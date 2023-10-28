@@ -1,0 +1,5 @@
+Steps to create the cluster
+
+1. helm install --genetate-name .
+
+2. helm uninstall ${releasename}
