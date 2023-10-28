@@ -44,7 +44,6 @@ spec:
               path: {{ .Values.webapp.readinessProbePath }}
               port: {{ .Values.webapp.containerPort }}
             periodSeconds: 20
-            initialDelay: 10
             failureThreshold: 10
         livenessProbe:
             httpGet:
