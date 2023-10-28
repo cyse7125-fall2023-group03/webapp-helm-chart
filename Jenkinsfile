@@ -2,11 +2,6 @@ pipeline {
     agent any
     tools{nodejs 'node'}
 
-    // environment {
-    //     // SEMANTIC_RELEASE_VERSION = '17.2.3'  // Specify the desired Semantic Release version
-    //     // NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
-    //     // GITHUB_TOKEN = credentials('sec-helm-gh')
-    // }
     stages {
         stage('Checkout Repository') {
             steps {
@@ -22,12 +17,10 @@ pipeline {
                 withCredentials([string(credentialsId: 'jenkins-27', variable: 'GIT_TOKEN') ]) {
                         sh "git config user.name 'semantic-release-bot'"
                         sh "git config user.password ${GIT_TOKEN}"
-
                            withEnv(["GH_TOKEN=${GIT_TOKEN}"]) {  
                                env.GIT_LOCAL_BRANCH='main'
                                 sh "npx semantic-release"
                             }
-
                     }
                 }
             }
