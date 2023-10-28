@@ -1,11 +1,12 @@
 pipeline {
     agent any
+    tools{nodejs 'node'}
 
-    environment {
-        // SEMANTIC_RELEASE_VERSION = '17.2.3'  // Specify the desired Semantic Release version
-        NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
-        // GITHUB_TOKEN = credentials('sec-helm-gh')
-    }
+    // environment {
+    //     // SEMANTIC_RELEASE_VERSION = '17.2.3'  // Specify the desired Semantic Release version
+    //     // NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
+    //     // GITHUB_TOKEN = credentials('sec-helm-gh')
+    // }
     stages {
         stage('Checkout Repository') {
             steps {
@@ -23,6 +24,7 @@ pipeline {
                         sh "git config user.password ${GIT_TOKEN}"
 
                            withEnv(["GH_TOKEN=${GIT_TOKEN}"]) {  
+                               env.GIT_LOCAL_BRANCH='main'
                                 sh "npx semantic-release"
                             }
 
@@ -35,11 +37,11 @@ pipeline {
             steps{
                 script{
                     withCredentials([string(credentialsId: 'jenkins-27', variable: 'GIT_TOKEN')]) {
-
-                    sh "git config user.name 'semantic-release-bot'"
-                    sh "git config user.password ${GIT_TOKEN}"
-                    version_id = sh(returnStdout: true, script: "git describe --tags --abbrev=0 --tags | tr -d 'v' ").trim()
-
+                        sh "git config user.name 'semantic-release-bot'"
+                        sh "git config user.password ${GIT_TOKEN}"
+                        version_id = sh(returnStdout: true, script: "git describe --tags --abbrev=0 --tags | tr -d 'v' ").trim()
+                        echo "${version_id}"
+                        // sh "rm -f *.tgz & helm package --version ${nextRelease.version} /var/lib/jenkins/workspace/helm"
                     }
                 }
             }
