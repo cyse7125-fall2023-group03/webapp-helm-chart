@@ -1,5 +1,21 @@
-Steps to create the cluster
+== Your Application ==
 
-1. helm install --genetate-name .
+Congratulations! Your application is now deployed.
 
-2. helm uninstall ${releasename}
+To access your application, follow these steps:
+
+1. Get the external IP address assigned to the LoadBalancer service:
+   kubectl get svc <RELEASE_NAME>
+
+2. Open a web browser and enter the external IP address.
+
+3. Your application should now be accessible.
+
+== Configuration ==
+
+To configure your application, refer to the values in your `values.yaml` file. You can customize the deployment by providing different values to Helm during installation.
+
+== Troubleshooting ==
+
+If you encounter any issues or need support, please contact our team at vasa.sr@northeastern.edu 
+

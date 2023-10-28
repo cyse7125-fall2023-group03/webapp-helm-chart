@@ -3,9 +3,9 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-webapp-config
 data:
-  DB_HOST: {{ .Values.postgresql.postgresService }}.{{ .Release.Namespace }}.svc.cluster.local
+  DB_HOST: {{ .Release.Name }}-{{ .Values.postgresql.postgresService }}.{{ .Release.Namespace }}.svc.cluster.local
   DB_PORT: {{ .Values.postgresql.postgresPort | quote }}  # Port as a string
   DB_NAME: {{ .Values.postgresql.postgresDatabase }}
   DB_USERNAME: {{ .Values.postgresql.postgresUser }}
-  DB_PASSWORD: {{ .Values.postgresql.postgresPassword }}
+  DB_PASSWORD: {{ .Release.Name }}-postgres-secrets
 

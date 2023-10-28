@@ -3,7 +3,6 @@ postgresql:
   enabled: true 
   postgresService: postgres
   postgresUser: postgres
-  postgresPassword: postgres
   postgresDatabase: app
   postgresPort: 5432
   postgresStorageSize: 3Gi
