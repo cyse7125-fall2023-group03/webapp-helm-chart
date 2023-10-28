@@ -38,7 +38,7 @@ pipeline {
 
                     sh "git config user.name 'semantic-release-bot'"
                     sh "git config user.password ${GIT_TOKEN}"
-                    version_id = sh(returnStdout: true, script: "git describe --tags --abbrev=0 --tags | tr -d 'v' ").trim(
+                    version_id = sh(returnStdout: true, script: "git describe --tags --abbrev=0 --tags | tr -d 'v' ").trim
 
                     }
                 }
