@@ -40,3 +40,40 @@ secrets:
   name: postgres-secrets
   data:
     postgresPassword: DB_PASSWORD
+
+
+kafka:
+    # PostgreSQL Configuration
+  postgresql:
+    enabled: true 
+    postgresService: postgres-kafka
+    postgresUser: postgres
+    postgresDatabase: app
+    postgresPort: 5433
+    postgresStorageSize: 3Gi
+    image:
+      repository: postgres  
+      tag: 13  
+
+  # Application Configuration
+  webapp:
+    replicaCount: 1 
+    containerPort: 8083
+    image:
+      repository: quay.io/csye7125group3/webapp-kafka  # Your application image repository
+      tag: latest  # Your application image tag
+    imagePullPolicy: IfNotPresent
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 2
+        maxUnavailable: 1
+    minReadySeconds: 45
+    progressDeadlineSeconds: 90
+
+  secrets:
+    imagePullSecrets: pg-pull-secret-kafka
+    postgresPassword: postgres-kafka-secrets
+    name: postgres-kafka-secrets
+    data:
+      postgresPassword: DB_PASSWORD

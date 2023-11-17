@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-postgres-kafka
+spec:
+  selector:
+    matchLabels:
+      app: postgres-kafka
+  serviceName: postgres-kafka
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: postgres-kafka
+    spec:
+      containers:
+        - name: postgres-kafka
+          image: {{ .Values.kafka.postgresql.image.repository }}:{{ .Values.kafka.postgresql.image.tag }}
+          env:
+            - name: POSTGRES_USER
+              value: {{ .Values.kafka.postgresql.postgresUser }}
+            - name: POSTGRES_PASSWORD
+              value: {{ .Release.Name }}-postgres-kafka-secrets
+            - name: POSTGRES_DB
+              value: {{ .Values.kafka.postgresql.postgresDatabase }}
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+          ports:
+          - name: postgres-kafka
+            containerPort: {{ .Values.kafka.postgresql.postgresPort}}
+          volumeMounts:
+          - name: postgres-kafka-pv-claim
+            mountPath: /var/lib/postgresql
+  volumeClaimTemplates:
+  - metadata:
+      name: postgres-kafka-pv-claim
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.kafka.postgresql.postgresStorageSize }}

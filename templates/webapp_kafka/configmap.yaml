@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-webapp-kafka-config
+data:
+  DB_HOST: {{ .Release.Name }}-{{ .Values.kafka.postgresql.postgresService }}.{{ .Release.Namespace }}.svc.cluster.local
+  DB_PORT: {{ .Values.kafka.postgresql.postgresPort | quote }}  # Port as a string
+  DB_NAME: {{ .Values.kafka.postgresql.postgresDatabase }}
+  DB_USERNAME: {{ .Values.kafka.postgresql.postgresUser }}
+  DB_PASSWORD: {{ .Release.Name }}-postgres-kafka-secrets
+
