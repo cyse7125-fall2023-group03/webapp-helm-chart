@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-webapp-kafka-lb-service
+spec:
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: {{ .Values.kafka.webapp.containerPort }}  # Adjust targetPort to match your application
+  selector:
+    app: webapp-kafka  # Label selector to match your pods
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-webapp-kafka-deployment
+  labels:
+    app: webapp-kafka
+spec:
+  replicas: {{ .Values.kafka.webapp.replicaCount }}
+  strategy:
+    type: {{ .Values.kafka.webapp.strategy.type }}
+    rollingUpdate:
+      maxSurge: {{ .Values.kafka.webapp.strategy.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.kafka.webapp.strategy.rollingUpdate.maxUnavailable }}
+  minReadySeconds: {{ .Values.kafka.webapp.minReadySeconds }}
+  progressDeadlineSeconds: {{ .Values.kafka.webapp.progressDeadlineSeconds }}
+  selector:
+    matchLabels:
+      app: webapp-kafka
+  template:
+    metadata:
+      labels:
+        app: webapp-kafka
+    spec:
+      containers:
+      - name: webapp-kafka
+        image: {{ .Values.kafka.webapp.image.repository }}:{{ .Values.kafka.webapp.image.tag }}
+        ports:
+        - containerPort: {{ .Values.kafka.webapp.containerPort }}
+        envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-webapp-kafka-config
+      imagePullSecrets:
+      - name: {{ .Release.Name }}-pull-secret-kafka
