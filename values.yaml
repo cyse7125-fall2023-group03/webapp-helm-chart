@@ -79,7 +79,7 @@ kafka:
       postgresPassword: DB_PASSWORD
 
 
-# Operator Configuration
+# Operator Configurations
 oper:
   containerPort: 8084
   image:
