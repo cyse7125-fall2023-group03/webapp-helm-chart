@@ -8,4 +8,3 @@ data:
   DB_NAME: {{ .Values.kafka.postgresql.postgresDatabase }}
   DB_USERNAME: {{ .Values.kafka.postgresql.postgresUser }}
   DB_PASSWORD: {{ .Release.Name }}-postgres-kafka-secrets
-

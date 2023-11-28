@@ -44,12 +44,14 @@ spec:
               path: {{ .Values.webapp.readinessProbePath }}
               port: {{ .Values.webapp.containerPort }}
             periodSeconds: 20
+            initialDelaySeconds: 300
             failureThreshold: 10
         livenessProbe:
             httpGet:
               path: {{ .Values.webapp.livenessProbePath }}  
               port: {{ .Values.webapp.containerPort }}
             periodSeconds: 15
+            initialDelaySeconds: 300
         envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-webapp-config

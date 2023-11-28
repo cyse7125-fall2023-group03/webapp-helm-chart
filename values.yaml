@@ -49,7 +49,7 @@ kafka:
     postgresService: postgres-kafka
     postgresUser: postgres
     postgresDatabase: app
-    postgresPort: 5433
+    postgresPort: 5432
     postgresStorageSize: 3Gi
     image:
       repository: postgres  
@@ -77,3 +77,12 @@ kafka:
     name: postgres-kafka-secrets
     data:
       postgresPassword: DB_PASSWORD
+
+
+# Operator Configuration
+oper:
+  containerPort: 8084
+  image:
+    repository: quay.io/csye7125group3/controller  # Your application image repository
+    tag: latest  # Your application image tag
+  imagePullPolicy: IfNotPresent

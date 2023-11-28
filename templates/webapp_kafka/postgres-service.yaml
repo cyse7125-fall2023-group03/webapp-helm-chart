@@ -3,12 +3,12 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-postgres-kafka
   labels:
-    app: postgres
+    app: postgres-kafka
 spec:
   ports:
-    - name: postgres
+    - name: postgres-kafka
       port: 5433
   clusterIP: None
   selector:
-    app: postgres
+    app: postgres-kafka
   type: ClusterIP

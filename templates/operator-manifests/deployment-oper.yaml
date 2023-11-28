@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-go-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: go-app
+  template:
+    metadata:
+      labels:
+        app: go-app
+    spec:
+      containers:
+      - name: go-app-container
+        image: {{ .Values.oper.image.repository }}:{{ .Values.oper.image.tag }}
+        ports:
+        - containerPort: {{ .Values.oper.containerPort }}
+      imagePullSecrets:
+        - name: {{ .Release.Name }}-pull-secret-oper
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-go-oper-service
+spec:
+  selector:
+    app: go-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: {{ .Values.oper.containerPort }}
+  type: ClusterIP
