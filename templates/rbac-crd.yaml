@@ -19,7 +19,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: default
-  namespace: default
+  namespace: webapp
 roleRef:
   kind: ClusterRole
   name: crd-listing-role

@@ -2,8 +2,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-webapp-config
+  namespace: webapp
 data:
-  DB_HOST: {{ .Release.Name }}-{{ .Values.postgresql.postgresService }}.{{ .Release.Namespace }}.svc.cluster.local
+  DB_HOST: {{ .Release.Name }}-{{ .Values.postgresql.postgresService }}.webapp.svc.cluster.local
   DB_PORT: {{ .Values.postgresql.postgresPort | quote }}  # Port as a string
   DB_NAME: {{ .Values.postgresql.postgresDatabase }}
   DB_USERNAME: {{ .Values.postgresql.postgresUser }}

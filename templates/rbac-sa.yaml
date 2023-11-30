@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  namespace: default
+  namespace: webapp
   name: healthcheck-custom-resource-role
 rules:
 - apiGroups: ["webapp.udaykk.me"]  # CRD's API group
@@ -12,11 +12,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: healthcheck-custom-resource-role-binding
-  namespace: default
+  namespace: webapp
 subjects:
 - kind: ServiceAccount
   name: default  # Replace with your ServiceAccount name
-  namespace: default
+  namespace: webapp
 roleRef:
   kind: Role
   name: healthcheck-custom-resource-role

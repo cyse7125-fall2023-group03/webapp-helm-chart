@@ -70,6 +70,7 @@ kafka:
         maxUnavailable: 1
     minReadySeconds: 45
     progressDeadlineSeconds: 90
+    kafkaPort: 9092
 
   secrets:
     imagePullSecrets: pg-pull-secret-kafka
