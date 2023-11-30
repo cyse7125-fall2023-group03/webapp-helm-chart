@@ -17,5 +17,5 @@ To configure your application, refer to the values in your `values.yaml` file. Y
 
 == Troubleshooting ==
 
-If you encounter any issues or need support, please contact our team at vasa.sr@northeastern.edu 
+If you encounter any issues/need support, please contact our team at vasa.sr@northeastern.edu 
 

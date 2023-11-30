@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Release.Name }}-webapp-lb-service
+  namespace: webapp
 spec:
   type: LoadBalancer
   ports:
@@ -15,6 +16,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Release.Name }}-webapp-deployment
+  namespace: webapp
   labels:
     app: webapp
 spec:
