@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-webapp-kafka-db-access-policy
+  namespace: consumer
+spec:
+  podSelector:
+    matchLabels:
+      app: postgres-kafka
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: webapp-kafka

@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-webapp-db-access-policy
+  namespace: webapp
+spec:
+  podSelector:
+    matchLabels:
+      app: postgres
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: webapp
