@@ -5,7 +5,7 @@ Helm charts are used to maintain the templates used to create the Kubernetes clu
 
 # Steps
 
-To run the helm charts 
+To run the helm charts use cmds below
 - cd into the project repo directory
 - helm install --generate-name ./ (to install)
 - helm uninstall ${releasename} (to destroy/uninstall)
