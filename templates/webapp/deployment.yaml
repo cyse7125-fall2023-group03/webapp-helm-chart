@@ -39,6 +39,13 @@ spec:
       containers:
       - name: webapp
         image: {{ .Values.webapp.image.repository }}:{{ .Values.webapp.image.tag }}
+        resources:
+          limits:
+            cpu: "500m" # Example CPU limit
+            memory: "512Mi" # Example memory limit
+          requests:
+            cpu: "200m" # Example CPU request
+            memory: "256Mi" # Example memory request
         ports:
         - containerPort: {{ .Values.webapp.containerPort }}
         readinessProbe:

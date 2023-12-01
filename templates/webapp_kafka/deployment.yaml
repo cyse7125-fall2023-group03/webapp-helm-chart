@@ -39,6 +39,13 @@ spec:
       containers:
       - name: webapp-kafka
         image: {{ .Values.kafka.webapp.image.repository }}:{{ .Values.kafka.webapp.image.tag }}
+        resources:
+          limits:
+            cpu: "500m" # Example CPU limit
+            memory: "512Mi" # Example memory limit
+          requests:
+            cpu: "200m" # Example CPU request
+            memory: "256Mi" # Example memory request
         ports:
         - containerPort: {{ .Values.kafka.webapp.containerPort }}
         envFrom:
