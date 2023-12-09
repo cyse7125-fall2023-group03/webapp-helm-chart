@@ -4,3 +4,4 @@ metadata:
   name: "consumer"
   labels:
     name: "consumer"
+    istio-injection: enabled
