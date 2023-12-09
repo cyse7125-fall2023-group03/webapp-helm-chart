@@ -1,0 +1,12 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: webapp-kafka-entry
+  namespace: webapp
+spec:
+  hosts:
+  - {{ .Release.Name }}-webapp-kafka-lb-service.consumer.svc.cluster.local
+  ports:
+  - number: 80
+    name: http
+    protocol: HTTP
