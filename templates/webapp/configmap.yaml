@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}-webapp-config
   namespace: webapp
 data:
-  DB_HOST: {{ .Release.Name }}-{{ .Values.postgresql.postgresService }}.webapp.svc.cluster.local
+  DB_HOST: {{ .Release.Name }}-{{ .Values.postgresql.postgresService }}.webapp-postgres.svc.cluster.local
   DB_PORT: {{ .Values.postgresql.postgresPort | quote }}  # Port as a string
   DB_NAME: {{ .Values.postgresql.postgresDatabase }}
   DB_USERNAME: {{ .Values.postgresql.postgresUser }}
