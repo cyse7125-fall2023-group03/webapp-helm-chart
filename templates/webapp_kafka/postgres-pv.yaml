@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: {{ .Release.Name }}-postgres-kafka-pvc
-  namespace: consumer
+  namespace: consumer-postgres
 spec:
   accessModes:
     - ReadWriteOnce 
