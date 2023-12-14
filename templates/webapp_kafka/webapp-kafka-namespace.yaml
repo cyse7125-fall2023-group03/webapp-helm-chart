@@ -5,3 +5,13 @@ metadata:
   labels:
     name: "consumer"
     istio-injection: enabled
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: "consumer-postgres"
+  labels:
+    name: "consumer-postgres"
+    istio-injection: enabled
