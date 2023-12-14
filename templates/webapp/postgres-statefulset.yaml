@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: {{ .Release.Name }}-postgres
-  namespace: webapp
+  namespace: webapp-postgres
 spec:
   selector:
     matchLabels:
