@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway 
+metadata:
+  name: {{ .Values.ingress.name }} 
+spec:
+  selector:
+      {{- range $key, $value := .Values.ingress.selectors }}
+      {{ $key }}: {{ $value }} 
+      {{- end }} 
+  servers:
+  - port:
+      number: {{ .Values.webapp.servicePort }}
+      name: {{ .Values.ingress.protocolName }} 
+      protocol: {{ .Values.ingress.protocol }} 
+    hosts:
+    - {{ .Values.ingress.host | quote }}
