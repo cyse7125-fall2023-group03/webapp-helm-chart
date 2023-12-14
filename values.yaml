@@ -12,6 +12,10 @@ postgresql:
 
 # Application Configuration
 webapp:
+  service: version-webapp-service.webapp.svc.cluster.Local 
+  servicePort: 80
+  deploymentName: version-webapp-deploy 
+  subset: original
   replicaCount: 1 
   containerPort: 8082
   image:
@@ -87,3 +91,26 @@ oper:
     repository: quay.io/csye7125group3/controller  # Your application image repository
     tag: latest  # Your application image tag
   imagePullPolicy: IfNotPresent
+
+kiali-server:
+# istio_namespace: istio-system
+  auth:
+    strategy: anonymous
+gateway:
+  name: istio-ingressgateway
+
+dr:
+  name: webapp-dr
+
+vs:
+  name: webapp-vs
+  destinationweight: 100
+
+ingress:
+  name: ingress-gateway-configuration 
+  protocol: HTTP
+  protocolName: http 
+  host: "*" 
+  selectors:
+    Istio: ingressgateway
+  
