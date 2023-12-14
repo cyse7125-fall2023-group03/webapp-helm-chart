@@ -1,16 +1,17 @@
-apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
+apiVersion: networking.istio.io/v1alpha3 
 metadata:
-  name: {{ .Release.Name }}-webapp-vs
-  namespace: webapp
+  name: {{ .Values.vs.name }} 
 spec:
   hosts:
-  - {{ .Release.Name }}-webapp-lb-service.webapp.svc.cluster.local
+    - {{ .Values.ingress.host | quote }}
   gateways:
-  - {{ .Release.Name }}-webapp-gateway
+    - {{ .Values.ingress.name }}
   http:
   - route:
     - destination:
-        host: {{ .Release.Name }}-webapp-lb-service.webapp.svc.cluster.local
-        port:
-          number: 80
+        port: 
+          number: {{ .Values.webapp.servicePort }}
+        host: {{ .Release.Name }}-webapp.webapp.svc.cluster.local
+        subset: {{ .Values.webapp.subset }}
+      weight: {{ .Values.vs.destinationWeight }}
